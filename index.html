@@ -1,168 +1,428 @@
-export default function GidaiKitenMaterialToolInitial() {
-  const helperKeywords = [
-    "比較",
-    "メリット",
-    "デメリット",
-    "注意点",
-    "実務活用",
-    "導入方法",
-    "リスク",
-    "最新動向",
-  ];
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>議題起点材料ツール</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      line-height: 1.6;
+    }
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+    }
+    .hero {
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+    .eyebrow {
+      font-size: 13px;
+      color: #475569;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 38px;
+      line-height: 1.2;
+    }
+    .lead {
+      margin-top: 14px;
+      color: #475569;
+      font-size: 15px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    .section {
+      padding: 24px;
+    }
+    h2 {
+      margin: 0 0 8px 0;
+      font-size: 24px;
+    }
+    .desc {
+      margin: 0 0 20px 0;
+      color: #475569;
+      font-size: 14px;
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    textarea {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 18px;
+      padding: 14px 16px;
+      font-size: 14px;
+      resize: vertical;
+      font-family: inherit;
+      color: #0f172a;
+      background: #fff;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: #64748b;
+      box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.25);
+    }
+    .field { margin-bottom: 20px; }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.18s ease;
+      user-select: none;
+    }
+    .chip:hover {
+      background: #f1f5f9;
+    }
+    .chip.active {
+      background: #0f172a;
+      color: #fff;
+      border-color: #0f172a;
+    }
+    .chip input {
+      display: none;
+    }
+    .primary-btn, .secondary-btn {
+      border: none;
+      border-radius: 18px;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .primary-btn:hover, .secondary-btn:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+    .primary-btn {
+      width: 100%;
+      background: #0f172a;
+      color: #fff;
+    }
+    .result-card {
+      padding: 24px;
+    }
+    .preview {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 20px;
+    }
+    .preview h3 {
+      margin: 0 0 12px 0;
+      font-size: 18px;
+    }
+    .summary-item {
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .summary-item strong {
+      color: #0f172a;
+    }
+    .instruction-box {
+      margin-top: 16px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 16px;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+    .actions {
+      margin-top: 18px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .secondary-btn {
+      flex: 1;
+      min-width: 220px;
+      background: #ffffff;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+    }
+    .primary-inline {
+      flex: 1;
+      min-width: 220px;
+      background: #0f172a;
+      color: #fff;
+      border: none;
+      border-radius: 18px;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .muted {
+      color: #64748b;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    .hidden { display: none; }
+    .small-title {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+      h1 { font-size: 30px; }
+      .wrap { padding: 16px; }
+      .hero, .section, .result-card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="card hero">
+      <div class="eyebrow">【議題起点型 判断材料構築システム】</div>
+      <h1>議題起点材料ツール</h1>
+      <p class="lead">
+        調べたいことと、そこから決めたいことを入力すると、情報取得用の指示文を整理して表示します。
+      </p>
+    </section>
 
-  const addConditions = [
-    "公式情報を優先",
-    "一次情報を優先",
-    "最新情報を優先",
-    "出典を明記",
-    "事実と意見を分ける",
-    "比較できる形で整理",
-    "初心者向けに整理",
-    "実務で使える形で整理",
-    "要点を簡潔に整理",
-  ];
+    <div class="grid">
+      <section class="card section">
+        <h2>入力</h2>
+        <p class="desc">
+          ここに調べたいことの内容を入力してください。入力後、下の項目から補助ワード、加えたい条件、除外したい条件を選択してください。
+        </p>
 
-  const excludeConditions = [
-    "まとめサイトを除外",
-    "憶測を除外",
-    "古い情報を除外",
-    "広告色の強い情報を除外",
-    "主観的な意見を除外",
-  ];
+        <div class="field">
+          <label for="topic">調べたいこと</label>
+          <textarea id="topic" rows="6" placeholder="例：店舗X運用で、インプレッションとエンゲージメントを伸ばしやすい投稿傾向を調べたい"></textarea>
+        </div>
 
-  return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 p-6 md:p-10">
-      <div className="max-w-5xl mx-auto space-y-8">
-        <header className="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 md:p-8">
-          <p className="text-sm font-medium text-slate-500 mb-2">【議題起点型 判断材料構築システム】</p>
-          <h1 className="text-2xl md:text-4xl font-bold tracking-tight">議題起点材料ツール</h1>
-          <p className="mt-4 text-sm md:text-base leading-7 text-slate-600">
-            調べたいことと、そこから決めたいことを入力すると、
-            情報取得用の指示文を整理して表示する初期版です。
-          </p>
-        </header>
+        <div class="field">
+          <label for="decision">決めたいこと</label>
+          <textarea id="decision" rows="5" placeholder="例：今後のX投稿ルールに何を反映するか決めたい"></textarea>
+        </div>
+      </section>
 
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 space-y-6">
-            <div>
-              <h2 className="text-xl font-semibold">入力</h2>
-              <p className="text-sm text-slate-600 mt-2 leading-6">
-                調べたいことの内容をここに入力してください。
-                入力後、下の項目から補助ワード、加えたい条件、除外したい条件を選択してください。
-              </p>
-            </div>
+      <section class="card section">
+        <h2>条件選択</h2>
+        <p class="desc">
+          必要なものだけ選択してください。複数選択できます。未選択でも使用できます。
+        </p>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium">調べたいこと</label>
-              <textarea
-                className="w-full min-h-[140px] rounded-2xl border border-slate-300 p-4 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                placeholder="例：店舗X運用で、インプレッションとエンゲージメントを伸ばしやすい投稿傾向を調べたい"
-              />
-            </div>
+        <div>
+          <div class="small-title">補助ワード</div>
+          <div class="chips" id="helperKeywords"></div>
+        </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium">決めたいこと</label>
-              <textarea
-                className="w-full min-h-[120px] rounded-2xl border border-slate-300 p-4 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                placeholder="例：今後のX投稿ルールに何を反映するか決めたい"
-              />
-            </div>
-          </div>
+        <div>
+          <div class="small-title">加えたい条件</div>
+          <div class="chips" id="addConditions"></div>
+        </div>
 
-          <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 space-y-6">
-            <div>
-              <h2 className="text-xl font-semibold">条件選択</h2>
-              <p className="text-sm text-slate-600 mt-2 leading-6">
-                必要なものだけ選択してください。複数選択できます。未選択でも使用できます。
-              </p>
-            </div>
+        <div>
+          <div class="small-title">除外したい条件</div>
+          <div class="chips" id="excludeConditions"></div>
+        </div>
 
-            <div>
-              <h3 className="text-sm font-semibold mb-3">補助ワード</h3>
-              <div className="flex flex-wrap gap-2">
-                {helperKeywords.map((item) => (
-                  <button
-                    key={item}
-                    className="px-4 py-2 rounded-full border border-slate-300 text-sm hover:bg-slate-100 transition"
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-sm font-semibold mb-3">加えたい条件</h3>
-              <div className="flex flex-wrap gap-2">
-                {addConditions.map((item) => (
-                  <button
-                    key={item}
-                    className="px-4 py-2 rounded-full border border-slate-300 text-sm hover:bg-slate-100 transition"
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-sm font-semibold mb-3">除外したい条件</h3>
-              <div className="flex flex-wrap gap-2">
-                {excludeConditions.map((item) => (
-                  <button
-                    key={item}
-                    className="px-4 py-2 rounded-full border border-slate-300 text-sm hover:bg-slate-100 transition"
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <button className="w-full rounded-2xl bg-slate-900 text-white font-semibold py-3.5 hover:opacity-90 transition">
-              次へ
-            </button>
-          </div>
-        </section>
-
-        <section className="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
-          <div>
-            <h2 className="text-xl font-semibold">確認と情報取得用の指示文</h2>
-            <p className="text-sm text-slate-600 mt-2 leading-6">
-              次へを押すと、入力内容と選択条件をもとに、以下のような確認文と指示文を表示します。
-            </p>
-          </div>
-
-          <div className="rounded-2xl bg-slate-50 border border-slate-200 p-5 space-y-4">
-            <div>
-              <h3 className="font-semibold text-base">あなたの調べたい内容は以下でよろしいですか？</h3>
-              <div className="mt-3 space-y-2 text-sm text-slate-700">
-                <p><span className="font-medium">調べたいこと：</span>店舗X運用で、インプレッションとエンゲージメントを伸ばしやすい投稿傾向を調べたい</p>
-                <p><span className="font-medium">決めたいこと：</span>今後のX投稿ルールに何を反映するか決めたい</p>
-                <p><span className="font-medium">補助ワード：</span>比較、実務活用、最新動向</p>
-                <p><span className="font-medium">加えたい条件：</span>公式情報を優先、出典を明記、事実と意見を分ける、実務で使える形で整理</p>
-                <p><span className="font-medium">除外したい条件：</span>憶測を除外、主観的な意見を除外</p>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-base">以下は、上記内容をもとに整理した情報取得用の指示文です。</h3>
-              <div className="mt-3 rounded-2xl bg-white border border-slate-200 p-4 text-sm leading-7 text-slate-700">
-                店舗X運用において、インプレッションとエンゲージメントを伸ばしやすい投稿傾向について調べてください。最終的に、今後のX投稿ルールに何を反映するべきか判断したいです。比較、実務活用、最新動向の観点を含めて整理してください。公式情報を優先し、出典を明記してください。事実と意見は分けて扱い、実務で使える形で要点を整理してください。憶測や主観的な意見は除外してください。
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <button className="flex-1 rounded-2xl border border-slate-300 bg-white py-3 font-medium hover:bg-slate-100 transition">
-                コピー
-              </button>
-              <button className="flex-1 rounded-2xl bg-slate-900 text-white py-3 font-medium hover:opacity-90 transition">
-                Perplexityを開く
-              </button>
-            </div>
-          </div>
-        </section>
-      </div>
+        <button class="primary-btn" id="nextButton">次へ</button>
+        <div class="muted">入力内容と選択条件をもとに、確認文とPerplexity用の指示文を作成します。</div>
+      </section>
     </div>
-  );
-}
+
+    <section class="card result-card hidden" id="resultSection">
+      <h2>確認と情報取得用の指示文</h2>
+      <p class="desc">内容に問題がなければ、コピーしてPerplexityで情報取得を行ってください。</p>
+
+      <div class="preview">
+        <h3>あなたの調べたい内容は以下でよろしいですか？</h3>
+        <div id="summaryArea"></div>
+
+        <h3 style="margin-top: 22px;">以下は、上記内容をもとに整理した情報取得用の指示文です。</h3>
+        <div class="instruction-box" id="instructionText"></div>
+
+        <div class="actions">
+          <button class="secondary-btn" id="copyButton">コピー</button>
+          <button class="primary-inline" id="openPerplexityButton">Perplexityを開く</button>
+        </div>
+        <div class="muted" id="copyMessage"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const helperKeywords = [
+      "比較",
+      "メリット",
+      "デメリット",
+      "注意点",
+      "実務活用",
+      "導入方法",
+      "リスク",
+      "最新動向"
+    ];
+
+    const addConditions = [
+      "公式情報を優先",
+      "一次情報を優先",
+      "最新情報を優先",
+      "出典を明記",
+      "事実と意見を分ける",
+      "比較できる形で整理",
+      "初心者向けに整理",
+      "実務で使える形で整理",
+      "要点を簡潔に整理"
+    ];
+
+    const excludeConditions = [
+      "まとめサイトを除外",
+      "憶測を除外",
+      "古い情報を除外",
+      "広告色の強い情報を除外",
+      "主観的な意見を除外"
+    ];
+
+    function renderChips(targetId, items) {
+      const target = document.getElementById(targetId);
+      target.innerHTML = "";
+
+      items.forEach((item, index) => {
+        const label = document.createElement("label");
+        label.className = "chip";
+        label.innerHTML = `<input type="checkbox" value="${item}" data-group="${targetId}" data-index="${index}"><span>${item}</span>`;
+
+        const input = label.querySelector("input");
+        input.addEventListener("change", () => {
+          label.classList.toggle("active", input.checked);
+        });
+
+        target.appendChild(label);
+      });
+    }
+
+    renderChips("helperKeywords", helperKeywords);
+    renderChips("addConditions", addConditions);
+    renderChips("excludeConditions", excludeConditions);
+
+    function getCheckedValues(groupId) {
+      return Array.from(document.querySelectorAll(`#${groupId} input:checked`)).map(el => el.value);
+    }
+
+    function joinOrFallback(list) {
+      return list.length ? list.join("、") : "なし";
+    }
+
+    function buildInstruction(topic, decision, helpers, adds, excludes) {
+      let text = `${topic}について調べてください。`;
+
+      if (decision) {
+        text += ` 最終的に、${decision}ための判断材料を整理したいです。`;
+      }
+
+      if (helpers.length) {
+        text += ` ${helpers.join("、")}の観点を含めて整理してください。`;
+      }
+
+      if (adds.length) {
+        text += ` ${adds.join("、")}${adds.length ? "。" : ""}`;
+      }
+
+      if (excludes.length) {
+        text += ` ${excludes.join("、")}してください。`;
+      }
+
+      return text.trim();
+    }
+
+    document.getElementById("nextButton").addEventListener("click", () => {
+      const topic = document.getElementById("topic").value.trim();
+      const decision = document.getElementById("decision").value.trim();
+      const helpers = getCheckedValues("helperKeywords");
+      const adds = getCheckedValues("addConditions");
+      const excludes = getCheckedValues("excludeConditions");
+
+      if (!topic) {
+        alert("『調べたいこと』を入力してください。");
+        document.getElementById("topic").focus();
+        return;
+      }
+
+      if (!decision) {
+        alert("『決めたいこと』を入力してください。");
+        document.getElementById("decision").focus();
+        return;
+      }
+
+      const summaryArea = document.getElementById("summaryArea");
+      summaryArea.innerHTML = `
+        <div class="summary-item"><strong>調べたいこと：</strong>${escapeHtml(topic)}</div>
+        <div class="summary-item"><strong>決めたいこと：</strong>${escapeHtml(decision)}</div>
+        <div class="summary-item"><strong>補助ワード：</strong>${escapeHtml(joinOrFallback(helpers))}</div>
+        <div class="summary-item"><strong>加えたい条件：</strong>${escapeHtml(joinOrFallback(adds))}</div>
+        <div class="summary-item"><strong>除外したい条件：</strong>${escapeHtml(joinOrFallback(excludes))}</div>
+      `;
+
+      const instruction = buildInstruction(topic, decision, helpers, adds, excludes);
+      document.getElementById("instructionText").textContent = instruction;
+      document.getElementById("resultSection").classList.remove("hidden");
+      document.getElementById("copyMessage").textContent = "";
+      document.getElementById("resultSection").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.getElementById("copyButton").addEventListener("click", async () => {
+      const text = document.getElementById("instructionText").textContent.trim();
+      if (!text) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        document.getElementById("copyMessage").textContent = "コピーしました。Perplexityへ貼り付けてご利用ください。";
+      } catch (error) {
+        document.getElementById("copyMessage").textContent = "コピーに失敗しました。手動でコピーしてください。";
+      }
+    });
+
+    document.getElementById("openPerplexityButton").addEventListener("click", () => {
+      window.open("https://www.perplexity.ai/", "_blank", "noopener,noreferrer");
+    });
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
