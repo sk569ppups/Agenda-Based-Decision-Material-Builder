@@ -1,0 +1,168 @@
+export default function GidaiKitenMaterialToolInitial() {
+  const helperKeywords = [
+    "比較",
+    "メリット",
+    "デメリット",
+    "注意点",
+    "実務活用",
+    "導入方法",
+    "リスク",
+    "最新動向",
+  ];
+
+  const addConditions = [
+    "公式情報を優先",
+    "一次情報を優先",
+    "最新情報を優先",
+    "出典を明記",
+    "事実と意見を分ける",
+    "比較できる形で整理",
+    "初心者向けに整理",
+    "実務で使える形で整理",
+    "要点を簡潔に整理",
+  ];
+
+  const excludeConditions = [
+    "まとめサイトを除外",
+    "憶測を除外",
+    "古い情報を除外",
+    "広告色の強い情報を除外",
+    "主観的な意見を除外",
+  ];
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900 p-6 md:p-10">
+      <div className="max-w-5xl mx-auto space-y-8">
+        <header className="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 md:p-8">
+          <p className="text-sm font-medium text-slate-500 mb-2">【議題起点型 判断材料構築システム】</p>
+          <h1 className="text-2xl md:text-4xl font-bold tracking-tight">議題起点材料ツール</h1>
+          <p className="mt-4 text-sm md:text-base leading-7 text-slate-600">
+            調べたいことと、そこから決めたいことを入力すると、
+            情報取得用の指示文を整理して表示する初期版です。
+          </p>
+        </header>
+
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 space-y-6">
+            <div>
+              <h2 className="text-xl font-semibold">入力</h2>
+              <p className="text-sm text-slate-600 mt-2 leading-6">
+                調べたいことの内容をここに入力してください。
+                入力後、下の項目から補助ワード、加えたい条件、除外したい条件を選択してください。
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">調べたいこと</label>
+              <textarea
+                className="w-full min-h-[140px] rounded-2xl border border-slate-300 p-4 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+                placeholder="例：店舗X運用で、インプレッションとエンゲージメントを伸ばしやすい投稿傾向を調べたい"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">決めたいこと</label>
+              <textarea
+                className="w-full min-h-[120px] rounded-2xl border border-slate-300 p-4 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+                placeholder="例：今後のX投稿ルールに何を反映するか決めたい"
+              />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 space-y-6">
+            <div>
+              <h2 className="text-xl font-semibold">条件選択</h2>
+              <p className="text-sm text-slate-600 mt-2 leading-6">
+                必要なものだけ選択してください。複数選択できます。未選択でも使用できます。
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold mb-3">補助ワード</h3>
+              <div className="flex flex-wrap gap-2">
+                {helperKeywords.map((item) => (
+                  <button
+                    key={item}
+                    className="px-4 py-2 rounded-full border border-slate-300 text-sm hover:bg-slate-100 transition"
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold mb-3">加えたい条件</h3>
+              <div className="flex flex-wrap gap-2">
+                {addConditions.map((item) => (
+                  <button
+                    key={item}
+                    className="px-4 py-2 rounded-full border border-slate-300 text-sm hover:bg-slate-100 transition"
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold mb-3">除外したい条件</h3>
+              <div className="flex flex-wrap gap-2">
+                {excludeConditions.map((item) => (
+                  <button
+                    key={item}
+                    className="px-4 py-2 rounded-full border border-slate-300 text-sm hover:bg-slate-100 transition"
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button className="w-full rounded-2xl bg-slate-900 text-white font-semibold py-3.5 hover:opacity-90 transition">
+              次へ
+            </button>
+          </div>
+        </section>
+
+        <section className="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
+          <div>
+            <h2 className="text-xl font-semibold">確認と情報取得用の指示文</h2>
+            <p className="text-sm text-slate-600 mt-2 leading-6">
+              次へを押すと、入力内容と選択条件をもとに、以下のような確認文と指示文を表示します。
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-slate-50 border border-slate-200 p-5 space-y-4">
+            <div>
+              <h3 className="font-semibold text-base">あなたの調べたい内容は以下でよろしいですか？</h3>
+              <div className="mt-3 space-y-2 text-sm text-slate-700">
+                <p><span className="font-medium">調べたいこと：</span>店舗X運用で、インプレッションとエンゲージメントを伸ばしやすい投稿傾向を調べたい</p>
+                <p><span className="font-medium">決めたいこと：</span>今後のX投稿ルールに何を反映するか決めたい</p>
+                <p><span className="font-medium">補助ワード：</span>比較、実務活用、最新動向</p>
+                <p><span className="font-medium">加えたい条件：</span>公式情報を優先、出典を明記、事実と意見を分ける、実務で使える形で整理</p>
+                <p><span className="font-medium">除外したい条件：</span>憶測を除外、主観的な意見を除外</p>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-base">以下は、上記内容をもとに整理した情報取得用の指示文です。</h3>
+              <div className="mt-3 rounded-2xl bg-white border border-slate-200 p-4 text-sm leading-7 text-slate-700">
+                店舗X運用において、インプレッションとエンゲージメントを伸ばしやすい投稿傾向について調べてください。最終的に、今後のX投稿ルールに何を反映するべきか判断したいです。比較、実務活用、最新動向の観点を含めて整理してください。公式情報を優先し、出典を明記してください。事実と意見は分けて扱い、実務で使える形で要点を整理してください。憶測や主観的な意見は除外してください。
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              <button className="flex-1 rounded-2xl border border-slate-300 bg-white py-3 font-medium hover:bg-slate-100 transition">
+                コピー
+              </button>
+              <button className="flex-1 rounded-2xl bg-slate-900 text-white py-3 font-medium hover:opacity-90 transition">
+                Perplexityを開く
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
