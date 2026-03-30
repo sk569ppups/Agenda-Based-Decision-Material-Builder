@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>議題起点材料ツール</title>
   <style>
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: "Yu Gothic", "Meiryo", sans-serif;
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
       background: #f8fafc;
       color: #0f172a;
       line-height: 1.6;
@@ -19,7 +19,7 @@
       padding: 24px;
     }
     .card {
-      background: #fff;
+      background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 24px;
       box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
@@ -115,7 +115,8 @@
     .chip input {
       display: none;
     }
-    .primary-btn, .secondary-btn, .primary-inline {
+    .primary-btn, .secondary-btn {
+      border: none;
       border-radius: 18px;
       padding: 14px 18px;
       font-size: 15px;
@@ -123,13 +124,12 @@
       cursor: pointer;
       transition: opacity 0.18s ease, transform 0.18s ease;
     }
-    .primary-btn:hover, .secondary-btn:hover, .primary-inline:hover {
+    .primary-btn:hover, .secondary-btn:hover {
       opacity: 0.92;
       transform: translateY(-1px);
     }
     .primary-btn {
       width: 100%;
-      border: none;
       background: #0f172a;
       color: #fff;
     }
@@ -150,9 +150,12 @@
       margin-bottom: 8px;
       font-size: 14px;
     }
+    .summary-item strong {
+      color: #0f172a;
+    }
     .instruction-box {
       margin-top: 16px;
-      background: #fff;
+      background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 18px;
       padding: 16px;
@@ -168,7 +171,7 @@
     .secondary-btn {
       flex: 1;
       min-width: 220px;
-      background: #fff;
+      background: #ffffff;
       color: #0f172a;
       border: 1px solid #cbd5e1;
     }
@@ -178,6 +181,11 @@
       background: #0f172a;
       color: #fff;
       border: none;
+      border-radius: 18px;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
     }
     .muted {
       color: #64748b;
@@ -223,6 +231,22 @@
         <div class="field">
           <label for="decision">決めたいこと</label>
           <textarea id="decision" rows="5" placeholder="例：今後のX投稿ルールに何を反映するか決めたい"></textarea>
+        </div>
+
+        <div class="preview" style="margin-top: 8px;">
+          <h3>入力例</h3>
+          <div class="summary-item"><strong>入力例1：SNS運用</strong></div>
+          <div class="summary-item">調べたいこと：店舗Xでインプレッションとエンゲージメントを上げる投稿傾向を知りたい</div>
+          <div class="summary-item">決めたいこと：今後の店舗X運用テンプレに何を入れるべきか決めたい</div>
+          <br>
+          <div class="summary-item"><strong>入力例2：施策判断</strong></div>
+          <div class="summary-item">調べたいこと：Googleマップ更新で来店前認知にどのような影響が出るか知りたい</div>
+          <div class="summary-item">決めたいこと：今後どの情報を優先して更新すべきか決めたい</div>
+          <br>
+          <div class="summary-item"><strong>入力例3：導入判断</strong></div>
+          <div class="summary-item">調べたいこと：新しいツールや仕組みを導入した場合のメリットと注意点を知りたい</div>
+          <div class="summary-item">決めたいこと：導入するか、見送るか、試験運用にするか決めたい</div>
+          <div class="muted">上に「知りたいこと」、下に「その情報を使って決めたいこと」を入れると整理しやすくなります。</div>
         </div>
       </section>
 
@@ -273,7 +297,7 @@
   </div>
 
   <script>
-    var helperKeywords = [
+    const helperKeywords = [
       "比較",
       "メリット",
       "デメリット",
@@ -284,7 +308,7 @@
       "最新動向"
     ];
 
-    var addConditions = [
+    const addConditions = [
       "公式情報を優先",
       "一次情報を優先",
       "最新情報を優先",
@@ -296,7 +320,7 @@
       "要点を簡潔に整理"
     ];
 
-    var excludeConditions = [
+    const excludeConditions = [
       "まとめサイトを除外",
       "憶測を除外",
       "古い情報を除外",
@@ -305,86 +329,63 @@
     ];
 
     function renderChips(targetId, items) {
-      var target = document.getElementById(targetId);
+      const target = document.getElementById(targetId);
       target.innerHTML = "";
 
-      items.forEach(function(item) {
-        var label = document.createElement("label");
+      items.forEach((item, index) => {
+        const label = document.createElement("label");
         label.className = "chip";
+        label.innerHTML = `<input type="checkbox" value="${item}" data-group="${targetId}" data-index="${index}"><span>${item}</span>`;
 
-        var input = document.createElement("input");
-        input.type = "checkbox";
-        input.value = item;
-
-        var span = document.createElement("span");
-        span.textContent = item;
-
-        input.addEventListener("change", function() {
-          if (input.checked) {
-            label.classList.add("active");
-          } else {
-            label.classList.remove("active");
-          }
+        const input = label.querySelector("input");
+        input.addEventListener("change", () => {
+          label.classList.toggle("active", input.checked);
         });
 
-        label.appendChild(input);
-        label.appendChild(span);
         target.appendChild(label);
       });
-    }
-
-    function getCheckedValues(groupId) {
-      var checked = document.querySelectorAll("#" + groupId + " input:checked");
-      return Array.prototype.map.call(checked, function(el) {
-        return el.value;
-      });
-    }
-
-    function joinOrFallback(list) {
-      return list.length ? list.join("、") : "なし";
-    }
-
-    function escapeHtml(str) {
-      return str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/\"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    function buildInstruction(topic, decision, helpers, adds, excludes) {
-      var text = topic + "について調べてください。";
-
-      if (decision) {
-        text += " 最終的に、" + decision + "ための判断材料を整理したいです。";
-      }
-
-      if (helpers.length) {
-        text += " " + helpers.join("、") + "の観点を含めて整理してください。";
-      }
-
-      if (adds.length) {
-        text += " " + adds.join("、") + "。";
-      }
-
-      if (excludes.length) {
-        text += " " + excludes.join("、") + "してください。";
-      }
-
-      return text.trim();
     }
 
     renderChips("helperKeywords", helperKeywords);
     renderChips("addConditions", addConditions);
     renderChips("excludeConditions", excludeConditions);
 
-    document.getElementById("nextButton").addEventListener("click", function() {
-      var topic = document.getElementById("topic").value.trim();
-      var decision = document.getElementById("decision").value.trim();
-      var helpers = getCheckedValues("helperKeywords");
-      var adds = getCheckedValues("addConditions");
-      var excludes = getCheckedValues("excludeConditions");
+    function getCheckedValues(groupId) {
+      return Array.from(document.querySelectorAll(`#${groupId} input:checked`)).map(el => el.value);
+    }
+
+    function joinOrFallback(list) {
+      return list.length ? list.join("、") : "なし";
+    }
+
+    function buildInstruction(topic, decision, helpers, adds, excludes) {
+      let text = `${topic}について調べてください。`;
+
+      if (decision) {
+        text += ` 最終的に、${decision}ための判断材料を整理したいです。`;
+      }
+
+      if (helpers.length) {
+        text += ` ${helpers.join("、")}の観点を含めて整理してください。`;
+      }
+
+      if (adds.length) {
+        text += ` ${adds.join("、")}${adds.length ? "。" : ""}`;
+      }
+
+      if (excludes.length) {
+        text += ` ${excludes.join("、")}してください。`;
+      }
+
+      return text.trim();
+    }
+
+    document.getElementById("nextButton").addEventListener("click", () => {
+      const topic = document.getElementById("topic").value.trim();
+      const decision = document.getElementById("decision").value.trim();
+      const helpers = getCheckedValues("helperKeywords");
+      const adds = getCheckedValues("addConditions");
+      const excludes = getCheckedValues("excludeConditions");
 
       if (!topic) {
         alert("『調べたいこと』を入力してください。");
@@ -398,34 +399,46 @@
         return;
       }
 
-      var summaryHtml = ""
-        + "<div class=\"summary-item\"><strong>調べたいこと：</strong>" + escapeHtml(topic) + "</div>"
-        + "<div class=\"summary-item\"><strong>決めたいこと：</strong>" + escapeHtml(decision) + "</div>"
-        + "<div class=\"summary-item\"><strong>補助ワード：</strong>" + escapeHtml(joinOrFallback(helpers)) + "</div>"
-        + "<div class=\"summary-item\"><strong>加えたい条件：</strong>" + escapeHtml(joinOrFallback(adds)) + "</div>"
-        + "<div class=\"summary-item\"><strong>除外したい条件：</strong>" + escapeHtml(joinOrFallback(excludes)) + "</div>";
+      const summaryArea = document.getElementById("summaryArea");
+      summaryArea.innerHTML = `
+        <div class="summary-item"><strong>調べたいこと：</strong>${escapeHtml(topic)}</div>
+        <div class="summary-item"><strong>決めたいこと：</strong>${escapeHtml(decision)}</div>
+        <div class="summary-item"><strong>補助ワード：</strong>${escapeHtml(joinOrFallback(helpers))}</div>
+        <div class="summary-item"><strong>加えたい条件：</strong>${escapeHtml(joinOrFallback(adds))}</div>
+        <div class="summary-item"><strong>除外したい条件：</strong>${escapeHtml(joinOrFallback(excludes))}</div>
+      `;
 
-      document.getElementById("summaryArea").innerHTML = summaryHtml;
-      document.getElementById("instructionText").textContent = buildInstruction(topic, decision, helpers, adds, excludes);
-      document.getElementById("copyMessage").textContent = "";
+      const instruction = buildInstruction(topic, decision, helpers, adds, excludes);
+      document.getElementById("instructionText").textContent = instruction;
       document.getElementById("resultSection").classList.remove("hidden");
+      document.getElementById("copyMessage").textContent = "";
       document.getElementById("resultSection").scrollIntoView({ behavior: "smooth", block: "start" });
     });
 
-    document.getElementById("copyButton").addEventListener("click", function() {
-      var text = document.getElementById("instructionText").textContent.trim();
+    document.getElementById("copyButton").addEventListener("click", async () => {
+      const text = document.getElementById("instructionText").textContent.trim();
       if (!text) return;
 
-      navigator.clipboard.writeText(text).then(function() {
+      try {
+        await navigator.clipboard.writeText(text);
         document.getElementById("copyMessage").textContent = "コピーしました。Perplexityへ貼り付けてご利用ください。";
-      }).catch(function() {
+      } catch (error) {
         document.getElementById("copyMessage").textContent = "コピーに失敗しました。手動でコピーしてください。";
-      });
+      }
     });
 
-    document.getElementById("openPerplexityButton").addEventListener("click", function() {
-      window.open("https://www.perplexity.ai/", "_blank");
+    document.getElementById("openPerplexityButton").addEventListener("click", () => {
+      window.open("https://www.perplexity.ai/", "_blank", "noopener,noreferrer");
     });
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
   </script>
 </body>
 </html>
